@@ -72,7 +72,8 @@ public class JGitVersionTask extends Task {
 				}
 			}
 			if (commitsBetweenBaseAndTag == Long.MAX_VALUE) {
-				commitsBetweenBaseAndTag = 0;
+				// If no tag, get total number of commits:
+				commitsBetweenBaseAndTag = repo.getRefDatabase().getRefs("").size();
 			}
 			long commitsSinceLastMasterTag = commitsSinceBase + commitsBetweenBaseAndTag;
 			
