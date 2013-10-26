@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<project name="JGitVersion" default="test">
+	
+	<target name="declare" depends="build">
+		<taskdef name="jgitversion" classname="hunternif.jgitversion.JGitVersionTask">
+			<classpath>
+				<pathelement path="build"/>
+                <pathelement path="lib/gitective/gitective-core-0.9.9.jar"/>
+                <pathelement path="lib/jgit/org.eclipse.jgit_2.2.0.201212191850-r.jar"/>
+            </classpath>
+		</taskdef>
+	</target>
+
+	<target name="test" depends="declare">
+		<jgitversion dir="." property="version"/>
+		<echo message="${version}"/>
+	</target>
+	
+	<target name="build">
+		<mkdir dir="build"/>
+		<javac srcdir="src" destdir="build">
+			<classpath>
+			    <pathelement path="lib/gitective/gitective-core-0.9.9.jar"/>
+			    <pathelement path="lib/jgit/org.eclipse.jgit_2.2.0.201212191850-r.jar"/>
+			</classpath>
+		</javac>
+	</target>
+
+</project>

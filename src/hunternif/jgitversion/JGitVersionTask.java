@@ -71,6 +71,9 @@ public class JGitVersionTask extends Task {
 					tagName = masterTags.get(tagCommit).getName();
 				}
 			}
+			if (commitsBetweenBaseAndTag == Long.MAX_VALUE) {
+				commitsBetweenBaseAndTag = 0;
+			}
 			long commitsSinceLastMasterTag = commitsSinceBase + commitsBetweenBaseAndTag;
 			
 			// Construct version string:
@@ -81,6 +84,9 @@ public class JGitVersionTask extends Task {
 			// v1.1 -> 1.1
 			if (tagName.matches("v\\d+.*")) {
 				tagName = tagName.substring(1);
+			}
+			if (tagName.isEmpty()) {
+				version = "0";
 			}
 			version += tagName + "." + commitsSinceLastMasterTag;
 			

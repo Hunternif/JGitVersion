@@ -1,0 +1,5 @@
+#bin
+build
+*.bak
+*.log
+#.settings
