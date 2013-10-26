@@ -8,7 +8,7 @@ As I was working with a team on a project using Git, I decided to somehow automa
 * If building from a separate branch, its name should be included in the version.
 
 > Example:  
-> On `master`, the last tag is named `v1.0` and 3 commits have been made since that tag. You are working on a branch `feature` (branched from the last commit in `master`) and have made 2 commits to it. Full version number for your build becomes `test-1.0.5`. If you switch back to `master`, full version number will become `1.0.3`.
+> On `master`, the last tag is named `v1.0` and 3 commits have been made since that tag. You are working on a branch `feature` (beginning from the last commit in `master`) and have made 2 commits to it. Full version number for your build becomes `test-1.0.5`. If you switch back to `master`, full version number will become `1.0.3`.
 
 This is partially achieved by command `git describe`. But as I am usually working on a Java project in Eclipse, I want an Ant build script; from Ant I can call custom java code, but the current version of JGit doesn't support `describe`. I also find it comfortable to manage the repository via Eclipse's egit, so I don't need to actually install Git and, on Windows, have it in my `PATH` environment variable, which means that I can't call `<exec executable="git"/>` from the Ant script.
 
