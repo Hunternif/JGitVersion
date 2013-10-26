@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="JGitVersion" default="test">
+<project name="JGitVersion" default="build-release">
 	
 	<target name="declare" depends="build">
 		<taskdef name="jgitversion" classname="hunternif.jgitversion.JGitVersionTask">
@@ -11,9 +11,9 @@
 		</taskdef>
 	</target>
 
-	<target name="test" depends="declare">
-		<jgitversion dir="." property="version"/>
-		<echo message="${version}"/>
+	<target name="version" depends="declare">
+		<jgitversion dir="." property="build.version"/>
+		<echo message="${build.version}"/>
 	</target>
 	
 	<target name="build">
@@ -24,6 +24,10 @@
 			    <pathelement path="lib/jgit/org.eclipse.jgit_2.2.0.201212191850-r.jar"/>
 			</classpath>
 		</javac>
+	</target>
+	
+	<target name="build-release" depends="version">
+		<jar destfile="build/jgitversion-${build.version}.jar" basedir="build"/>
 	</target>
 
 </project>
