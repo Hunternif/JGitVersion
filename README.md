@@ -29,8 +29,8 @@ Build the jar from sources and include it along with `JGit` and `gitective` in y
 </taskdef>
 
 <target name="build-release">
-		<jgitversion dir="." property="build.version"/>
-		<echo message="${build.version}" />
-		...
+    <jgitversion dir="." property="build.version"/>
+    <echo message="${build.version}" />
+    ...
 </target>
 ```
