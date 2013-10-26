@@ -17,6 +17,7 @@
 	</target>
 	
 	<target name="build">
+		<delete dir="bin"/>
 		<mkdir dir="bin"/>
 		<javac srcdir="src" destdir="bin">
 			<classpath>
