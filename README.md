@@ -7,12 +7,12 @@ As I was working with a team on a project using Git, I decided to somehow automa
 * Each commit subsequent to the tag adds to the build number. (Only for tags on `master`.)
 * If building from a separate branch, its name should be included in the version.
 
-_Example:_  
-> On `master`, the last tag is `v1.0` and there are 3 commits since that tag. You are working on a branch `feature` and have made 2 commits to it. Full version number for your build becomes `test-1.0.5`. If you switch back to `master`, full version number will become `1.0.3`.
+> Example:  
+> On `master`, the last tag is named `v1.0` and 3 commits have been made since that tag. You are working on a branch `feature` (branched from the last commit in `master`) and have made 2 commits to it. Full version number for your build becomes `test-1.0.5`. If you switch back to `master`, full version number will become `1.0.3`.
 
 This is partially achieved by command `git describe`. But as I am usually working on a Java project in Eclipse, I want an Ant build script; from Ant I can call custom java code, but the current version of JGit doesn't support `describe`. I also find it comfortable to manage the repository via Eclipse's egit, so I don't need to actually install Git and, on Windows, have it in my `PATH` environment variable, which means that I can't call `<exec executable="git"/>` from the Ant script.
 
-Having considered all that, I creted this custom Ant task.
+Having considered all that, I created this custom Ant task.
 
 Using JGitVersion
 =================
