@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -53,7 +54,9 @@ public class JGitVersionTask extends Task {
 			Map<RevCommit, Ref> masterTags = new HashMap<RevCommit, Ref>();
 			for (Ref tag : tags) {
 				tag = repo.peel(tag);
-				RevCommit commit = rw.parseCommit(tag.getPeeledObjectId());
+				ObjectId commitID = tag.getPeeledObjectId();
+				if (commitID == null) continue;
+				RevCommit commit = rw.parseCommit(commitID);
 				// Only remember tags reachable from "master":
 				if (!RevWalkUtils.findBranchesReachableFrom(commit, rw, masterAsList).isEmpty()) {
 					masterTags.put(commit, tag);
