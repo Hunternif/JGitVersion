@@ -25,12 +25,17 @@ import org.gitective.core.filter.commit.CommitCountFilter;
 public class JGitVersionTask extends Task {
 	private String dir;
 	private String property;
+	private boolean tagonly;
 	
 	public void setDir(String dir) {
 		this.dir = dir;
 	}
 	public void setProperty(String property) {
 		this.property = property;
+	}
+	
+	public void setTagonly(boolean tagonly) {
+		this.tagonly = tagonly;
 	}
 	
 	@Override
@@ -46,7 +51,7 @@ public class JGitVersionTask extends Task {
 		}
 	}
 	
-	public static String getProjectVersion(File repoDir) throws IOException, GitAPIException {
+	public String getProjectVersion(File repoDir) throws IOException, GitAPIException {
 		Git git = Git.open(repoDir);
 		Repository repo = git.getRepository();
 		
@@ -106,7 +111,7 @@ public class JGitVersionTask extends Task {
 		if (tagName.isEmpty()) {
 			version = "0";
 		}
-		version += tagName + "." + commitsSinceLastMasterTag;
+		version += tagName + ((!tagonly) ? "." + commitsSinceLastMasterTag : "");
 		
 		return version;
 	}
