@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
@@ -23,9 +24,17 @@ import org.gitective.core.CommitUtils;
 import org.gitective.core.filter.commit.CommitCountFilter;
 
 public class JGitVersionTask extends Task {
+	
+	public static class BooleanOrAuto extends EnumeratedAttribute {
+		@Override
+		public String[] getValues() {
+			return new String[] { "true", "false", "auto" };
+		}
+	}
+	
 	private File dir;
 	private String property;
-	private boolean tagonly;
+	private BooleanOrAuto tagonly;
 	
 	public void setDir(File dir) {
 		this.dir = dir;
@@ -34,7 +43,7 @@ public class JGitVersionTask extends Task {
 		this.property = property;
 	}
 	
-	public void setTagonly(boolean tagonly) {
+	public void setTagonly(BooleanOrAuto tagonly) {
 		this.tagonly = tagonly;
 	}
 	
@@ -111,7 +120,19 @@ public class JGitVersionTask extends Task {
 		if (tagName.isEmpty()) {
 			version = "0";
 		}
-		version += tagName + ((!tagonly) ? "." + commitsSinceLastMasterTag : "");
+		
+		boolean tagonlyEvaluated = false;  // Default if attribute not set
+		if (tagonly != null) {
+			boolean isAuto = tagonly.getValue().equalsIgnoreCase("auto");
+			if (isAuto) {
+				tagonlyEvaluated = commitsSinceLastMasterTag == 0;
+			}
+			else {
+				tagonlyEvaluated = Boolean.parseBoolean(tagonly.getValue());
+			}
+		}
+		
+		version += tagName + ((!tagonlyEvaluated) ? "." + commitsSinceLastMasterTag : "");
 		
 		return version;
 	}
