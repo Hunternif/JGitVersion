@@ -23,11 +23,11 @@ import org.gitective.core.CommitUtils;
 import org.gitective.core.filter.commit.CommitCountFilter;
 
 public class JGitVersionTask extends Task {
-	private String dir;
+	private File dir;
 	private String property;
 	private boolean tagonly;
 	
-	public void setDir(String dir) {
+	public void setDir(File dir) {
 		this.dir = dir;
 	}
 	public void setProperty(String property) {
@@ -41,7 +41,7 @@ public class JGitVersionTask extends Task {
 	@Override
 	public void execute() throws BuildException {
 		try {
-			String version = getProjectVersion(new File(dir));
+			String version = getProjectVersion(dir);
 			Project project = getProject();
 			if (project != null) {
 				project.setProperty(property, version);
