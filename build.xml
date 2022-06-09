@@ -12,7 +12,7 @@
 	</target>
 
 	<target name="version" depends="declare">
-		<jgitversion dir="." property="build.version"/>
+		<jgitversion dir="." masterBranch="master" property="build.version"/>
 		<echo message="${build.version}"/>
 	</target>
 	
