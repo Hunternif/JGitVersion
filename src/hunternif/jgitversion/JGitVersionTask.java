@@ -24,6 +24,7 @@ import org.gitective.core.filter.commit.CommitCountFilter;
 
 public class JGitVersionTask extends Task {
 	private String dir;
+	private String masterBranch;
 	private String property;
 	private boolean tagonly;
 	
@@ -33,6 +34,10 @@ public class JGitVersionTask extends Task {
 	public void setProperty(String property) {
 		this.property = property;
 	}
+	public void setMasterBranch(String masterBranch) {
+		this.masterBranch = masterBranch;
+	}
+
 	
 	public void setTagonly(boolean tagonly) {
 		this.tagonly = tagonly;
@@ -55,9 +60,9 @@ public class JGitVersionTask extends Task {
 		Git git = Git.open(repoDir);
 		Repository repo = git.getRepository();
 		
-		// Find base commit between current branch and "master":
+		// Find base commit between current branch and "main":
 		String branch = repo.getBranch();
-		RevCommit base = CommitUtils.getBase(repo, "master", branch);
+		RevCommit base = CommitUtils.getBase(repo, this.masterBranch, branch);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder finder = new CommitFinder(repo).setFilter(count);
 		finder.findBetween(branch, base);
@@ -67,7 +72,7 @@ public class JGitVersionTask extends Task {
 		RevWalk rw = new RevWalk(repo);
 		rw.markStart(base);
 		rw.setRetainBody(false);
-		Ref master = repo.getRef("master");
+		Ref master = repo.getRef(this.masterBranch);
 		List<Ref> masterAsList = Arrays.asList(master);
 		List<Ref> tags = git.tagList().call();
 		Map<RevCommit, Ref> masterTags = new HashMap<RevCommit, Ref>();
@@ -100,7 +105,7 @@ public class JGitVersionTask extends Task {
 		long commitsSinceLastMasterTag = commitsSinceBase + commitsBetweenBaseAndTag;
 		
 		// Construct version string:
-		String version = branch.equals("master") ? "" : (branch + "-");
+		String version = branch.equals(this.masterBranch) ? "" : (branch + "-");
 		if (tagName.startsWith("refs/tags/")) {
 			tagName = tagName.substring("refs/tags/".length());
 		}
